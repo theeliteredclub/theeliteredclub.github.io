@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exclusive Private Club</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+    ></script>
+    <style>
+      /* General Reset */
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        font-family: "Arial", sans-serif;
+        color: white;
+        background-color: black;
+      }
+
+      .header {
+        background-color: red;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        position: relative;
+      }
+
+      .header .logo {
+        display: flex;
+        align-items: center;
+      }
+
+      .header .logo img {
+        width: 50px; /* Adjust size of logo */
+        margin-right: 10px; /* Space between logo and text */
+      }
+
+      .header .logo-text {
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: white;
+        font-size: 1em;
+      }
+
+      /* Hero section with background fade effect */
+      .hero {
+        height: 100vh;
+        background: url("https://via.placeholder.com/1920x1080") no-repeat
+          center center/cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        animation: fadeBackground 20s infinite;
+      }
+
+      .hero-content h1 {
+        font-size: 3em;
+        color: white;
+        margin-bottom: 10px;
+      }
+
+      .hero-content p {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+      }
+
+      .hero-content button {
+        background-color: red;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        color: white;
+        border-radius: 5px;
+      }
+
+      @keyframes fadeBackground {
+        0% {
+          background-image: url("https://iili.io/2kErOYP.md.jpg"); /* First image */
+          opacity: 1;
+        }
+        20% {
+          background-image: url("https://iili.io/2kErhEQ.md.jpg"); /* Second image */
+          opacity: 1;
+        }
+        33% {
+          background-image: url("https://iili.io/2kErj4V.md.jpg"); /* Third image */
+          opacity: 1;
+        }
+        66% {
+          background-image: url("https://iili.io/2kErN3B.md.jpg"); /* Fourth image */
+          opacity: 1;
+        }
+        100% {
+          background-image: url("https://iili.io/2kErev1.md.jpg"); /* Fifth image */
+          opacity: 1;
+        }
+      }
+
+      .about-section,
+      .membership-section {
+        padding: 50px 20px;
+        text-align: center;
+      }
+
+      .about-section {
+        background-color: black;
+        border-top: 2px solid red;
+      }
+
+      .membership-section {
+        background-color: red;
+      }
+
+      .membership-section form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .membership-section input,
+      .membership-section textarea,
+      .membership-section button {
+        padding: 10px;
+        font-size: 1em;
+      }
+
+      .membership-section button {
+        background-color: black;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      .footer {
+        background-color: black;
+        text-align: center;
+        padding: 20px;
+        border-top: 2px solid red;
+      }
+
+      .testimonials-section {
+        background-color: black;
+        color: white;
+        padding: 50px 20px;
+        text-align: center;
+      }
+
+      .testimonial-container {
+        font-size: 1.2em;
+        line-height: 1.5;
+        max-width: 600px;
+        margin: 0 auto;
+        position: relative;
+        height: 120px; /* Adjust based on the content length */
+        overflow: hidden;
+      }
+
+      #testimonial-text,
+      #testimonial-author {
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+      }
+      /* Login Form Styles */
+      .login-form-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .login-form {
+        background: white;
+        color: black;
+        padding: 20px;
+        border-radius: 10px;
+        width: 300px;
+        text-align: center;
+      }
+
+      .login-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+      }
+
+      .login-form label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .login-form input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid red;
+        border-radius: 5px;
+      }
+
+      .login-form button {
+        width: 100%;
+        padding: 10px;
+        background: red;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .loader {
+        display: none;
+        margin: 15px auto;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid red;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .login-message {
+        color: red;
+        font-weight: bold;
+        margin-top: 10px;
+      }
+
+      .cards-section {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        padding: 40px 20px;
+        gap: 20px;
+        flex-wrap: wrap; /* Ensures responsive behavior */
+      }
+
+      .card {
+        width: 280px;
+        background: linear-gradient(
+          145deg,
+          #1c1c1c,
+          #272727
+        ); /* Subtle gradient */
+        box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.8),
+          -10px -10px 20px rgba(255, 255, 255, 0.1); /* 3D effect */
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-10px); /* Subtle lift on hover */
+        box-shadow: 15px 15px 25px rgba(0, 0, 0, 0.8),
+          -15px -15px 25px rgba(255, 255, 255, 0.2);
+      }
+
+      .circle-image {
+        margin: 0 auto 15px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #e50914; /* Red theme color */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+      }
+
+      .circle-image img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .circle-image i {
+        color: white;
+        font-size: 2.5em;
+      }
+
+      .card h3 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        color: white;
+      }
+
+      .card p {
+        font-size: 1em;
+        color: #ddd;
+      }
+
+      /* For responsiveness */
+      @media (max-width: 768px) {
+        .cards-section {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+
+      /* Wrapper for Circle */
+      .circle-wrapper {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 15px;
+      }
+
+      /* Circular Progress Bar */
+      .circle-progress {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: conic-gradient(
+          white 0%,
+          white 50%,
+          transparent 50%,
+          transparent 100%
+        );
+        animation: fill-progress 5s linear forwards;
+      }
+
+      /* Circle with Icon */
+      .circle-image1 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #e50914;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Progress Bar Animation */
+      @keyframes fill-progress {
+        0% {
+          background: conic-gradient(
+            white 0%,
+            white 0%,
+            transparent 0%,
+            transparent 100%
+          );
+        }
+        100% {
+          background: conic-gradient(white 0%, red 100%, transparent 100%);
+        }
+      }
+
+      /* Number Animation */
+      #satisfied-count {
+        font-size: 2em;
+        font-weight: bold;
+        color: #e50914;
+        animation: count-number 5s linear forwards;
+      }
+
+      @keyframes count-number {
+        from {
+          counter-reset: satisfied 0;
+        }
+        to {
+          counter-reset: satisfied 2345;
+        }
+      }
+
+      #available-suites {
+        font-weight: bold;
+        color: #e50914;
+        animation: count-number 5s linear forwards;
+      }
+
+      .partners h3 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #fff;
+      }
+
+      .partner-logos {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .partner-logos a {
+        display: inline-block;
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 3px solid red;
+        overflow: hidden;
+        transition: border-color 0.4s ease;
+      }
+
+      .partner-logos a:hover {
+        border-color: white;
+      }
+
+      .partner-logos img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+      }
+
+      .h-menu {
+        display: none;
+      }
+
+      .mobile-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        max-height: 0;
+        overflow-y: hidden;
+        transition: max-height 0.3s ease;
+        z-index: 1000;
+      }
+
+      .mobile-nav-links {
+        list-style: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+      }
+      .mobile-nav-links li {
+        padding: 10px 0;
+      }
+
+      .mobile-nav-links a {
+        color: white;
+        font-size: 1.2em;
+        text-decoration: none;
+      }
+
+      @media (max-width: 600px) {
+        .nav-links {
+          display: none;
+        }
+        .h-menu {
+          display: block;
+        }
+
+        .mobile-nav {
+          display: block;
+        }
+      }
+    </style>
+
+    <!-- <script type="text/javascript">
+      (function () {
+        emailjs.init({
+          publicKey: "Ft1ijakehPtIC1h_3",
+        });
+      })();
+    </script>
+    <script type="text/javascript">
+      window.onload = function () {
+        document
+          .getElementById("membership-form")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+            // these IDs from the previous steps
+            emailjs.sendForm("service_xutfl1b", "template_30i0rdb", this).then(
+              () => {
+                console.log("SUCCESS!");
+              },
+              (error) => {
+                console.log("FAILED...", error);
+              }
+            );
+          });
+      };
+    </script> -->
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <img src="https://iili.io/2kEQ96b.md.webp" alt="Elite Red Club Logo" />
+        <!-- Replace with your logo path -->
+        <div class="logo-text">Elite Red Club</div>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a onclick="showLoginForm()">Login</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#membership">Membership</a></li>
+          <li><a href="https://t.me/EliteRedClub">Contact</a></li>
+        </ul>
+      </nav>
+      <button
+        class="h-menu"
+        style="
+          padding: 5px 8px;
+          background: rgba(255, 255, 255, 0.4);
+          border: none;
+          border-radius: 5px;
+          color: #fff;
+        "
+      >
+        <box-icon name="menu"></box-icon>
+      </button>
+      <nav class="mobile-nav" id="menu_id">
+        <ul class="mobile-nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#membership">Membership</a></li>
+          <li><a href="https://t.me/EliteRedClub">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Welcome to the Elite Red Club</h1>
+        <p>Where exclusivity meets sophistication</p>
+        <button onclick="scrollToMembership()">Join Now</button>
+      </div>
+    </section>
+
+    <section class="cards-section">
+      <!-- Plan Card -->
+      <div class="card" id="plan-card">
+        <div class="circle-image">
+          <img id="plan-image" src="plan1.jpg" alt="Plan 1" />
+        </div>
+        <h3 id="plan-title">Premium Membership</h3>
+        <p id="plan-description">Access all exclusive areas and events.</p>
+      </div>
+
+      <!-- Satisfied Customers Card -->
+      <div class="card">
+        <div class="circle-wrapper">
+          <div class="circle-progress">
+            <div class="circle-image1">
+              <i class="fas fa-users"></i>
+            </div>
+          </div>
+        </div>
+        <h3>Satisfied Clients</h3>
+        <p id="satisfied-count">0</p>
+      </div>
+
+      <!-- Available Suites Card -->
+      <div class="card">
+        <div class="circle-image">
+          <i class="fas fa-bed"></i>
+        </div>
+        <h3>Available Suites</h3>
+        <p id="available-suites">0</p>
+      </div>
+    </section>
+
+    <section id="about" class="about-section">
+      <h2>About Us</h2>
+      <p>
+        Since 2008, Elite Red Club has been at the forefront of providing
+        top-tier services to those who demand only the best. With a focus on
+        privacy, luxury, and an unparalleled experience, we offer an exclusive
+        space for individuals who seek a lifestyle beyond the ordinary. From
+        bespoke events to elite memberships, our offerings are tailored for
+        those who truly understand the value of sophistication. Join us and
+        experience the highest standard of elegance, where every detail is
+        crafted to perfection.
+      </p>
+    </section>
+
+    <section id="testimonials" class="testimonials-section">
+      <h2>What Our Members Say</h2>
+      <div class="testimonial-container">
+        <p id="testimonial-text"></p>
+        <p id="testimonial-author"></p>
+      </div>
+    </section>
+
+    <section id="membership" class="membership-section">
+      <h2>Membership Application</h2>
+      <p>
+        Complete the form below to apply for membership and enjoy access to our
+        exclusive amenities.
+      </p>
+      <form id="membership-form" method="post" enctype="text/plain">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="message">Why do you want to join?</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+
+    <div id="login-form-container" class="login-form-container">
+      <div class="login-form">
+        <img
+          src="https://iili.io/2kEQ96b.md.webp"
+          alt="User Icon"
+          class="login-icon"
+        />
+        <form id="login-form">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required />
+
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+
+          <button type="button" onclick="login()">Login</button>
+          <div id="loader" class="loader"></div>
+        </form>
+        <p id="login-message" class="login-message"></p>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="partners">
+        <h3>Our Partners</h3>
+        <div class="partner-logos">
+          <a href="https://onlyfans.com" target="_blank">
+            <img src="https://iili.io/2kSZKUG.png" alt="Partner 1" />
+          </a>
+          <a href="https://www.playboy.com" target="_blank">
+            <img src="https://iili.io/2kSZFls.md.jpg" alt="Partner 2" />
+          </a>
+          <a href="https://www.bdsmamerica.com" target="_blank">
+            <img src="https://iili.io/2kSZBR4.png" alt="Partner 3" />
+          </a>
+          <a href="https://stockroom.com" target="_blank">
+            <img src="https://iili.io/2kSZqJf.md.png" alt="Partner 3" />
+          </a>
+        </div>
+      </div>
+      <p>&copy; 2024 Elite Red Club. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <script>
+      // Satisfied Customers Count Animation
+      const satisfiedCountElem = document.getElementById("satisfied-count");
+      const finalCount = 2345; // Final number
+      const duration = 5000; // Duration in ms
+      const interval = 20; // Interval for updates in ms
+      const increment = finalCount / (duration / interval);
+
+      let currentCount = 0;
+
+      const countInterval = setInterval(() => {
+        currentCount += increment;
+        if (currentCount >= finalCount) {
+          currentCount = finalCount;
+          clearInterval(countInterval);
+        }
+        satisfiedCountElem.textContent =
+          Math.floor(currentCount).toLocaleString();
+      }, interval);
+      // Plan details
+      const plans = [
+        {
+          title: "Premium Membership",
+          description: "Access all exclusive areas and events.",
+          image: "https://iili.io/2kw4N5J.md.webp",
+        },
+
+        {
+          title: "Silver Membership",
+          description: "Basic access to lounges and standard areas.",
+          image: "https://iili.io/2kw6i41.md.webp",
+        },
+
+        {
+          title: "Gold Membership",
+          description:
+            "Enjoy priority access to exclusive suites and amenities.",
+          image: "https://iili.io/2kwPFvs.md.webp",
+        },
+      ];
+
+      let currentPlanIndex = 0;
+
+      function updatePlanCard() {
+        const planTitle = document.getElementById("plan-title");
+        const planDescription = document.getElementById("plan-description");
+        const planImage = document.getElementById("plan-image");
+
+        const plan = plans[currentPlanIndex];
+        planTitle.textContent = plan.title;
+        planDescription.textContent = plan.description;
+        planImage.src = plan.image;
+
+        currentPlanIndex = (currentPlanIndex + 1) % plans.length; // Cycle through plans
+      }
+
+      // Update the Plan Card every 5 seconds
+      setInterval(updatePlanCard, 5000);
+
+      // Dynamic Available Suites (Optional: Simulate random availability)
+      const availableSuitesElem = document.getElementById("available-suites");
+      const maxSuites = 40;
+
+      setInterval(() => {
+        const randomSuites = Math.floor(Math.random() * maxSuites) + 1; // Random number between 1 and maxSuites
+        availableSuitesElem.textContent = randomSuites;
+      }, 30000); // Update every 15 minutes
+
+      function showLoginForm() {
+        const loginContainer = document.getElementById("login-form-container");
+        loginContainer.style.display = "flex";
+      }
+
+      function login() {
+        const loader = document.getElementById("loader");
+        const message = document.getElementById("login-message");
+
+        loader.style.display = "block";
+        message.textContent = "";
+
+        setTimeout(() => {
+          loader.style.display = "none";
+          message.textContent = "Can't find credentials. Please try again.";
+        }, 2000);
+      }
+      function scrollToMembership() {
+        document
+          .getElementById("membership")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      const testimonials = [
+        {
+          text: "Elite Red Club has elevated my lifestyle to unmatched levels of luxury.",
+          author: "- Mistress Claire",
+        },
+        {
+          text: "Joining this club was the best decision I've ever made for privacy and exclusivity.",
+          author: "— Beasty DOM",
+        },
+        {
+          text: "Every moment with Elite Red Club feels like a retreat into sophistication.",
+          author: "— JustJohn",
+        },
+        {
+          text: "The Elite Red Club redefines exclusivity; it's a world of its own.",
+          author: "— Freaky Sub",
+        },
+        {
+          text: "I've never felt more valued and catered to in my life. Highly recommended!",
+          author: "— Charming Mistress",
+        },
+        {
+          text: "This club brings fantasy to life, blending luxury with privacy perfectly.",
+          author: "— Fantasy Couple",
+        },
+        {
+          text: "Every visit feels like stepping into a dream. Elite Red Club truly spoils its members.",
+          author: "— Mystic Seeker",
+        },
+        {
+          text: "Being a part of this club is more than membership; it’s an identity.",
+          author: "— Velvet Whisper",
+        },
+        {
+          text: "From start to finish, every experience is impeccable and unmatched.",
+          author: "— Playful Dominant",
+        },
+        {
+          text: "Elite Red Club is a sanctuary for those who demand the extraordinary.",
+          author: "— Lustful Explorer",
+        },
+        {
+          text: "The ambiance, the people, the discretion – perfection in every sense.",
+          author: "— Elegant Bond",
+        },
+        {
+          text: "For anyone seeking privacy and indulgence, this club is a dream come true.",
+          author: "— Sultry Visionary",
+        },
+        {
+          text: "Elite Red Club isn’t just a place, it’s a lifestyle.",
+          author: "— Mystery Muse",
+        },
+      ];
+
+      let currentTestimonial = 0;
+
+      function showTestimonial() {
+        const textElement = document.getElementById("testimonial-text");
+        const authorElement = document.getElementById("testimonial-author");
+
+        textElement.style.opacity = 0;
+        authorElement.style.opacity = 0;
+
+        setTimeout(() => {
+          textElement.textContent = testimonials[currentTestimonial].text;
+          authorElement.textContent = testimonials[currentTestimonial].author;
+
+          textElement.style.opacity = 1;
+          authorElement.style.opacity = 1;
+
+          currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+        }, 1000);
+      }
+
+      setInterval(showTestimonial, 5000); // Change every 5 seconds
+      document.addEventListener("DOMContentLoaded", showTestimonial);
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Mobile Navigation
+        const hMenu = document.querySelector(".h-menu");
+        const mobileNav = document.querySelector(".mobile-nav");
+        hMenu.addEventListener("click", () => {
+          mobileNav.style.maxHeight = mobileNav.style.maxHeight ? "" : "300px";
+        });
+      });
+    </script>
+  </body>
+</html>
