@@ -508,21 +508,20 @@
     </script>
     <script type="text/javascript">
       window.onload = function () {
-        alert("Welcome to the Elite Red Club!");
-        // document
-          // .getElementById("membership-form")
-          // .addEventListener("submit", function (event) {
-          //   event.preventDefault();
-          //   // these IDs from the previous steps
-          //   emailjs.sendForm("service_xutfl1b", "template_30i0rdb", this).then(
-          //     () => {
-          //       console.log("SUCCESS!");
-          //     },
-          //     (error) => {
-          //       console.log("FAILED...", error);
-          //     }
-          //   );
-          // });
+        document
+          .getElementById("membership-form")
+          .addEventListener("submit", function (event) {
+            event.preventDefault();
+            // these IDs from the previous steps
+            emailjs.sendForm("service_xutfl1b", "template_30i0rdb", this).then(
+              () => {
+                console.log("SUCCESS!");
+              },
+              (error) => {
+                console.log("FAILED...", error);
+              }
+            );
+          });
       };
     </script>
   </head>
