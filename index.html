@@ -512,13 +512,20 @@
           .getElementById("membership-form")
           .addEventListener("submit", function (event) {
             event.preventDefault();
-            // these IDs from the previous steps
+
+            // Send the form using EmailJS
             emailjs.sendForm("service_xutfl1b", "template_30i0rdb", this).then(
               () => {
-                console.log("SUCCESS!");
+                // Display success message
+                alert("Form submitted successfully!");
+
+                // Clear the form fields
+                this.reset();
               },
               (error) => {
-                console.log("FAILED...", error);
+                // Display error message
+                alert("Failed to submit the form. Please try again.");
+                console.error("Submission failed:", error);
               }
             );
           });
